@@ -7,13 +7,25 @@ public class ChunkManagerService : MonoBehaviour
     int chunkSize = 32;
 
     List<Chunk> chunks = new List<Chunk>();
+
+    public Texture2D textureAtlas;
+
+    public GeneratingMeshes generatingMeshes = new GeneratingMeshes();
+
+    public MapGeneration mapGeneration = new MapGeneration();
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GenerateTestMap();
+        chunks = ConvertMapToChunks(mapGeneration.GenerateMap(), chunkSize);
 
         // Test: find chunks within 3 chunks of the center
-        List<Chunk> nearbyChunks = GetChunksInRadius(16, 16, 3);
+        List<Chunk> nearbyChunks = GetChunksInRadius(16,16,3);
+
+        for (int i = 0; i < chunks.Count; i++)
+        {
+            generatingMeshes.GenerateGrid(chunks[i], textureAtlas);
+        }
 
         Debug.Log("Found " + nearbyChunks.Count + " nearby chunks.");
     }
@@ -118,6 +130,43 @@ public class ChunkManagerService : MonoBehaviour
             chunkPosition.x * chunkSize,
             chunkPosition.y * chunkSize
         );
+    }
+
+    public List<Chunk> ConvertMapToChunks(MapNode[,] mapNodes, int chunkSize)
+    {
+        List<Chunk> chunks = new List<Chunk>();
+
+        int mapWidth = mapNodes.GetLength(0);
+        int mapHeight = mapNodes.GetLength(1);
+
+        int chunksX = Mathf.CeilToInt((float)mapWidth / chunkSize);
+        int chunksY = Mathf.CeilToInt((float)mapHeight / chunkSize);
+
+        for (int chunkY = 0; chunkY < chunksY; chunkY++)
+        {
+            for (int chunkX = 0; chunkX < chunksX; chunkX++)
+            {
+                Chunk chunk = new Chunk(chunkX, chunkY);
+
+                int startX = chunkX * chunkSize;
+                int startY = chunkY * chunkSize;
+
+                int endX = Mathf.Min(startX + chunkSize, mapWidth);
+                int endY = Mathf.Min(startY + chunkSize, mapHeight);
+
+                for (int y = startY; y < endY; y++)
+                {
+                    for (int x = startX; x < endX; x++)
+                    {
+                        chunk.nodes.Add(mapNodes[x, y]);
+                    }
+                }
+
+                chunks.Add(chunk);
+            }
+        }
+
+        return chunks;
     }
 }
 

@@ -6,18 +6,18 @@ public class GeneratingMeshes : MonoBehaviour
     public int xSize = 10; // Number of segments along X
     public int zSize = 10; // Number of segments along Z
 
-    public Texture2D[] textures;
+    //public Texture2D[] textures;
 
     // Your texture atlas
-    public Texture2D textureAtlas;
+    //public Texture2D textureAtlas;
 
     // Number of tiles across and down
-    public int atlasColumns = 2;
-    public int atlasRows = 2;
+    //public int atlasColumns = 2;
+    //public int atlasRows = 2;
 
     void Start()
     {
-        GenerateGrid();
+        //GenerateGrid();
     }
 
     //void GenerateGrid()
@@ -395,7 +395,7 @@ public class GeneratingMeshes : MonoBehaviour
     //    GetComponent<MeshRenderer>().material = material;
     //}
 
-    void GenerateGrid()
+    public void GenerateGrid(Chunk chunk, Texture2D textureAtlas)
     {
         Mesh mesh = new Mesh();
         mesh.name = "ProceduralGrid";
@@ -413,60 +413,41 @@ public class GeneratingMeshes : MonoBehaviour
         {
             for (int x = 0; x < xSize; x++)
             {
-                // -------------------------
-                // Vertices
-                // -------------------------
-
                 vertices[vertexIndex + 0] = new Vector3(x, 0, z);
                 vertices[vertexIndex + 1] = new Vector3(x + 1, 0, z);
                 vertices[vertexIndex + 2] = new Vector3(x, 0, z + 1);
                 vertices[vertexIndex + 3] = new Vector3(x + 1, 0, z + 1);
 
+                int nodeIndex = z * xSize + x;
 
-                // -------------------------
-                // Pick random tile
-                // -------------------------
+                MapNode node = chunk.nodes[nodeIndex];
 
-                int tileX = Random.Range(0, 2);
-                int tileY = Random.Range(0, 2);
+                float uMin = 0;
+                float uMax = 0;
+                float vMin = 0;
+                float vMax = 0;
 
-                // Flip Y because Unity UVs start
-                // at the bottom-left
-                tileY = 1 - tileY;
+                if (node.type == MapNodeType.water)
+                {
+                    uMin = 0;
+                    uMax = 0.5f;
 
+                    vMin = 0.5f;
+                    vMax = 1.0f;
+                }
+                else if (node.type == MapNodeType.land)
+                {
+                    uMin = 0.5f;
+                    uMax = 1.0f;
 
-                // -------------------------
-                // Atlas dimensions
-                // -------------------------
-
-                float tileSize = 128f;
-                float atlasSize = 256f;
-
-
-                // -------------------------
-                // Calculate UV coordinates
-                // -------------------------
-
-                float uMin = (tileX * tileSize) / atlasSize;
-                float uMax = ((tileX + 1) * tileSize) / atlasSize;
-
-                float vMin = (tileY * tileSize) / atlasSize;
-                float vMax = ((tileY + 1) * tileSize) / atlasSize;
-
-
-                // -------------------------
-                // Assign UVs
-                // -------------------------
+                    vMin = 0.5f;
+                    vMax = 1.0f;
+                }
 
                 uv[vertexIndex + 0] = new Vector2(uMin, vMin);
                 uv[vertexIndex + 1] = new Vector2(uMax, vMin);
                 uv[vertexIndex + 2] = new Vector2(uMin, vMax);
                 uv[vertexIndex + 3] = new Vector2(uMax, vMax);
-
-
-                // -------------------------
-                // Triangles
-                // -------------------------
 
                 triangles[triangleIndex + 0] = vertexIndex + 0;
                 triangles[triangleIndex + 1] = vertexIndex + 2;
@@ -476,12 +457,10 @@ public class GeneratingMeshes : MonoBehaviour
                 triangles[triangleIndex + 4] = vertexIndex + 2;
                 triangles[triangleIndex + 5] = vertexIndex + 3;
 
-
                 vertexIndex += 4;
                 triangleIndex += 6;
             }
         }
-
 
         // -------------------------
         // Assign mesh data
@@ -493,7 +472,9 @@ public class GeneratingMeshes : MonoBehaviour
 
         mesh.RecalculateNormals();
 
-        GetComponent<MeshFilter>().mesh = mesh;
+        GameObject emptyGO = new GameObject("New Engine");
+
+        emptyGO.AddComponent<MeshFilter>().mesh = mesh;
 
 
         // -------------------------
@@ -506,6 +487,9 @@ public class GeneratingMeshes : MonoBehaviour
 
         material.mainTexture = textureAtlas;
 
-        GetComponent<MeshRenderer>().material = material;
+
+
+        emptyGO.AddComponent<MeshRenderer>().material = material;
+        emptyGO.transform.position = new Vector3(chunk.chunkX * 32, 0, chunk.chunkY * 32);
     }
 }

@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
-using static UnityEditor.Progress;
 using Random = UnityEngine.Random;
 
 public class MapGeneration : MonoBehaviour
@@ -13,7 +12,19 @@ public class MapGeneration : MonoBehaviour
     int MapSize = 1024;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
+    {
+        GenerateMap();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public MapNode[,] GenerateMap()
     {
         mapNodes = new MapNode[MapSize, MapSize];
 
@@ -21,11 +32,11 @@ public class MapGeneration : MonoBehaviour
         {
             for (int y = 0; y < MapSize; y++)
             {
-                mapNodes[x, y] = new MapNode(MapNodeType.water, new Vector2(x,y));
+                mapNodes[x, y] = new MapNode(MapNodeType.water, new Vector2(x, y));
             }
         }
 
-        List<Vector2>  blobMap = new();
+        List<Vector2> blobMap = new();
 
         Vector2 newStartingPoint = Vector2.zero;
 
@@ -90,47 +101,7 @@ public class MapGeneration : MonoBehaviour
 
         ExpandRegions(mapNodes);
 
-
-        foreach (var item in mapNodes)
-        {
-            if (item.type == MapNodeType.border)
-            {
-                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube.transform.position = new Vector3(item.pos.x, 0, item.pos.y);
-            }
-
-            if (item.regionID == 1)
-            {
-                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube.transform.position = new Vector3(item.pos.x, 0, item.pos.y);
-
-                cube.GetComponent<Renderer>().material.color = UnityEngine.Color.green;
-            }
-
-            if (item.regionID == 2)
-            {
-                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube.transform.position = new Vector3(item.pos.x, 0, item.pos.y);
-
-                cube.GetComponent<Renderer>().material.color = UnityEngine.Color.teal;
-            }
-
-            if (item.regionID == 3)
-            {
-                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube.transform.position = new Vector3(item.pos.x, 0, item.pos.y);
-
-                cube.GetComponent<Renderer>().material.color = UnityEngine.Color.purple;
-            }
-
-        }
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return mapNodes;
     }
 
     public List<Vector2> MakePositive(List<Vector2> points)
