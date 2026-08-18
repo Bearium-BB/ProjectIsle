@@ -395,7 +395,7 @@ public class GeneratingMeshes : MonoBehaviour
     //    GetComponent<MeshRenderer>().material = material;
     //}
 
-    public void GenerateGrid(Chunk chunk, Texture2D textureAtlas)
+    public GameObject GenerateGrid(Chunk chunk, Texture2D textureAtlas)
     {
         Mesh mesh = new Mesh();
         mesh.name = "ProceduralGrid";
@@ -487,9 +487,10 @@ public class GeneratingMeshes : MonoBehaviour
 
         material.mainTexture = textureAtlas;
 
-
-
         emptyGO.AddComponent<MeshRenderer>().material = material;
         emptyGO.transform.position = new Vector3(chunk.chunkX * 32, 0, chunk.chunkY * 32);
+
+        return emptyGO;
+
     }
 }

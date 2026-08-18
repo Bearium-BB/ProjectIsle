@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class ChunkManagerService : MonoBehaviour
 {
@@ -14,20 +15,50 @@ public class ChunkManagerService : MonoBehaviour
 
     public MapGeneration mapGeneration = new MapGeneration();
 
+    public Transform player;
+
+    public List<GameObject> meshes = new List<GameObject>();
+
+    public Vector2Int oldChunkPosition = Vector2Int.zero;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         chunks = ConvertMapToChunks(mapGeneration.GenerateMap(), chunkSize);
 
-        // Test: find chunks within 3 chunks of the center
-        List<Chunk> nearbyChunks = GetChunksInRadius(16,16,3);
+        Vector2Int chunkPosition = WorldToChunkPosition(new Vector2(player.position.x, player.position.z));
+        List<Chunk> nearbyChunks = GetChunksInRadius(chunkPosition.x, chunkPosition.y, 3);
 
-        for (int i = 0; i < chunks.Count; i++)
+        for (int i = 0; i < nearbyChunks.Count; i++)
         {
-            generatingMeshes.GenerateGrid(chunks[i], textureAtlas);
+            meshes.Add(generatingMeshes.GenerateGrid(nearbyChunks[i], textureAtlas));
         }
 
         Debug.Log("Found " + nearbyChunks.Count + " nearby chunks.");
+    }
+
+    private void Update()
+    {
+        Vector2Int chunkPosition = WorldToChunkPosition(new Vector2(player.position.x, player.position.z));
+
+        if (oldChunkPosition != chunkPosition)
+        {
+            foreach (GameObject gameObject in meshes)
+            {
+                Destroy(gameObject);
+            }
+
+            meshes.Clear();
+
+            List<Chunk> nearbyChunks = GetChunksInRadius(chunkPosition.x, chunkPosition.y, 3);
+
+            for (int i = 0; i < nearbyChunks.Count; i++)
+            {
+                meshes.Add(generatingMeshes.GenerateGrid(nearbyChunks[i], textureAtlas));
+            }
+
+            oldChunkPosition = chunkPosition;
+        }
+
     }
 
     void GenerateTestMap()
