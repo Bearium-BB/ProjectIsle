@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using static UnityEditor.Progress;
@@ -9,7 +10,7 @@ using Random = UnityEngine.Random;
 public class MapGeneration : MonoBehaviour
 {
     MapNode[,] mapNodes;
-    int MapSize = 1000;
+    int MapSize = 1024;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -46,19 +47,121 @@ public class MapGeneration : MonoBehaviour
 
         }
 
-        List<Vector2> outlinePoints = GetOutline(blobMap);
+        List<Vector2> outlinePoints = MakePositive(GetOutline(blobMap));
 
-        foreach (var item in outlinePoints)
+        for (int i = 0; i < outlinePoints.Count; i++)
         {
-            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.transform.position = new Vector3(item.x, 0, item.y);
+            mapNodes[(int)outlinePoints[i].x, (int)outlinePoints[i].y] = new MapNode(MapNodeType.border, new Vector2((int)outlinePoints[i].x, (int)outlinePoints[i].y));
         }
+
+        List<Vector2> innerPoints = GetInsideFromOutline(outlinePoints);
+
+        for (int i = 0; i < innerPoints.Count; i++)
+        {
+            mapNodes[(int)innerPoints[i].x, (int)innerPoints[i].y] = new MapNode(MapNodeType.land, new Vector2((int)innerPoints[i].x, (int)innerPoints[i].y));
+        }
+
+        Debug.Log(innerPoints.Count);
+
+        Vector2 regionStartingPosition1 = innerPoints[Random.Range(0, innerPoints.Count)];
+
+        Vector2 regionStartingPosition2 = innerPoints[Random.Range(0, innerPoints.Count)];
+
+        Vector2 regionStartingPosition3 = innerPoints[Random.Range(0, innerPoints.Count)];
+
+        Vector2 regionStartingPosition4 = innerPoints[Random.Range(0, innerPoints.Count)];
+
+        Vector2 regionStartingPosition5 = innerPoints[Random.Range(0, innerPoints.Count)];
+
+        Vector2 regionStartingPosition6 = innerPoints[Random.Range(0, innerPoints.Count)];
+
+        Vector2 regionStartingPosition7 = innerPoints[Random.Range(0, innerPoints.Count)];
+
+
+        mapNodes[(int)regionStartingPosition1.x, (int)regionStartingPosition1.y].regionID = 1;
+        mapNodes[(int)regionStartingPosition2.x, (int)regionStartingPosition2.y].regionID = 2;
+        mapNodes[(int)regionStartingPosition3.x, (int)regionStartingPosition3.y].regionID = 3;
+        mapNodes[(int)regionStartingPosition4.x, (int)regionStartingPosition1.y].regionID = 1;
+        mapNodes[(int)regionStartingPosition5.x, (int)regionStartingPosition2.y].regionID = 2;
+        mapNodes[(int)regionStartingPosition6.x, (int)regionStartingPosition3.y].regionID = 3;
+        mapNodes[(int)regionStartingPosition7.x, (int)regionStartingPosition2.y].regionID = 1;
+
+
+
+        ExpandRegions(mapNodes);
+
+
+        foreach (var item in mapNodes)
+        {
+            if (item.type == MapNodeType.border)
+            {
+                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                cube.transform.position = new Vector3(item.pos.x, 0, item.pos.y);
+            }
+
+            if (item.regionID == 1)
+            {
+                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                cube.transform.position = new Vector3(item.pos.x, 0, item.pos.y);
+
+                cube.GetComponent<Renderer>().material.color = UnityEngine.Color.green;
+            }
+
+            if (item.regionID == 2)
+            {
+                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                cube.transform.position = new Vector3(item.pos.x, 0, item.pos.y);
+
+                cube.GetComponent<Renderer>().material.color = UnityEngine.Color.teal;
+            }
+
+            if (item.regionID == 3)
+            {
+                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                cube.transform.position = new Vector3(item.pos.x, 0, item.pos.y);
+
+                cube.GetComponent<Renderer>().material.color = UnityEngine.Color.purple;
+            }
+
+        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public List<Vector2> MakePositive(List<Vector2> points)
+    {
+        if (points == null || points.Count == 0)
+            return new List<Vector2>();
+
+        float minX = points[0].x;
+        float minY = points[0].y;
+        float maxX = points[0].x;
+        float maxY = points[0].y;
+
+        // Find the bounding box
+        foreach (Vector2 point in points)
+        {
+            minX = Mathf.Min(minX, point.x);
+            minY = Mathf.Min(minY, point.y);
+            maxX = Mathf.Max(maxX, point.x);
+            maxY = Mathf.Max(maxY, point.y);
+        }
+
+        Vector2 offset = new Vector2(-minX, -minY);
+
+        List<Vector2> result = new List<Vector2>(points.Count);
+
+        foreach (Vector2 point in points)
+        {
+            result.Add(point + offset);
+        }
+
+        return result;
     }
 
     List<Vector2> GenerateNoiseBlog(float baseRadius = 25, int pointCount = 64, float noiseScale = 2f, float variation = 40f)
@@ -245,4 +348,154 @@ public class MapGeneration : MonoBehaviour
 
         return outline;
     }
+
+    public List<Vector2> GetInsideFromOutline(List<Vector2> outline)
+    {
+        HashSet<Vector2Int> border = new HashSet<Vector2Int>();
+
+        foreach (Vector2 p in outline)
+        {
+            border.Add(new Vector2Int(
+                Mathf.RoundToInt(p.x),
+                Mathf.RoundToInt(p.y)
+            ));
+        }
+
+
+        int minX = border.Min(p => p.x);
+        int maxX = border.Max(p => p.x);
+        int minY = border.Min(p => p.y);
+        int maxY = border.Max(p => p.y);
+
+
+        // Expand bounds so outside exists
+        minX--;
+        minY--;
+        maxX++;
+        maxY++;
+
+
+        HashSet<Vector2Int> outside = new HashSet<Vector2Int>();
+        Queue<Vector2Int> queue = new Queue<Vector2Int>();
+
+
+        Vector2Int start = new Vector2Int(minX, minY);
+
+        outside.Add(start);
+        queue.Enqueue(start);
+
+
+        Vector2Int[] dirs =
+        {
+        new(1,0),
+        new(-1,0),
+        new(0,1),
+        new(0,-1)
+    };
+
+
+        while (queue.Count > 0)
+        {
+            Vector2Int current = queue.Dequeue();
+
+            foreach (var dir in dirs)
+            {
+                Vector2Int next = current + dir;
+
+
+                if (next.x < minX || next.x > maxX ||
+                   next.y < minY || next.y > maxY)
+                    continue;
+
+
+                if (border.Contains(next))
+                    continue;
+
+
+                if (outside.Contains(next))
+                    continue;
+
+
+                outside.Add(next);
+                queue.Enqueue(next);
+            }
+        }
+
+
+        // Everything not outside and not border is inside
+        List<Vector2> inside = new();
+
+
+        for (int x = minX; x <= maxX; x++)
+        {
+            for (int y = minY; y <= maxY; y++)
+            {
+                Vector2Int pos = new Vector2Int(x, y);
+
+                if (!outside.Contains(pos) &&
+                   !border.Contains(pos))
+                {
+                    inside.Add(pos);
+                }
+            }
+        }
+
+
+        return inside;
+    }
+
+
+    public void ExpandRegions(MapNode[,] mapNodes)
+    {
+        int width = mapNodes.GetLength(0);
+        int height = mapNodes.GetLength(1);
+
+        Queue<MapNode> queue = new Queue<MapNode>();
+
+        // Add every existing region to the queue.
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (mapNodes[x, y].regionID > 0)
+                {
+                    queue.Enqueue(mapNodes[x, y]);
+                }
+            }
+        }
+
+        int[] dx = { 1, -1, 0, 0 };
+        int[] dy = { 0, 0, 1, -1 };
+
+        while (queue.Count > 0)
+        {
+            MapNode current = queue.Dequeue();
+
+            for (int i = 0; i < 4; i++)
+            {
+                int nx = (int)current.pos.x + dx[i];
+                int ny = (int)current.pos.y + dy[i];
+
+                if (nx < 0 || ny < 0 || nx >= width || ny >= height)
+                    continue;
+
+                MapNode neighbor = mapNodes[nx, ny];
+
+                // Don't spread into borders.
+                if (neighbor.type == MapNodeType.border)
+                    continue;
+
+                if (neighbor.type == MapNodeType.water)
+                    continue;
+
+                // Only claim unowned cells.
+                if (neighbor.regionID == 0)
+                {
+                    neighbor.regionID = current.regionID;
+                    queue.Enqueue(neighbor);
+                }
+            }
+        }
+    }
+
 }

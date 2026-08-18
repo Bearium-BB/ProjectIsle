@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "maxStack": 64,
+      "name": "Wood"
+    },
+    {
+      "id": 2,
+      "maxStack": 64,
+      "name": "Stone"
+    },
+    {
+      "id": 3,
+      "maxStack": 16,
+      "name": "Iron Ore"
+    },
+    {
+      "id": 4,
+      "maxStack": 1,
+      "name": "Iron Sword"
+    }
+  ]
+}
