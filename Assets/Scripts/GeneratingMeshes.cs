@@ -427,21 +427,15 @@ public class GeneratingMeshes : MonoBehaviour
                 float vMin = 0;
                 float vMax = 0;
 
-                if (node.type == MapNodeType.water)
+                if (node.type == MapNodeType.land)
                 {
-                    uMin = 0;
-                    uMax = 0.5f;
 
-                    vMin = 0.5f;
-                    vMax = 1.0f;
+                    GetTileUV(2048, 2048, 512, 512, 0, 0,out uMin, out uMax, out vMin, out vMax);
+ 
                 }
-                else if (node.type == MapNodeType.land)
+                else if (node.type == MapNodeType.water)
                 {
-                    uMin = 0.5f;
-                    uMax = 1.0f;
-
-                    vMin = 0.5f;
-                    vMax = 1.0f;
+                    GetTileUV(2048, 2048, 512, 512, 1, 0, out uMin, out uMax, out vMin, out vMax);
                 }
 
                 uv[vertexIndex + 0] = new Vector2(uMin, vMin);
@@ -482,7 +476,7 @@ public class GeneratingMeshes : MonoBehaviour
         // -------------------------
 
         Material material = new Material(
-            Shader.Find("Universal Render Pipeline/Lit")
+            Shader.Find("Universal Render Pipeline/Unlit")
         );
 
         material.mainTexture = textureAtlas;
@@ -492,5 +486,25 @@ public class GeneratingMeshes : MonoBehaviour
 
         return emptyGO;
 
+    }
+
+    void GetTileUV(
+    int atlasWidth,
+    int atlasHeight,
+    int tileWidth,
+    int tileHeight,
+    int tileX,
+    int tileY,
+    out float uMin,
+    out float uMax,
+    out float vMin,
+    out float vMax)
+    {
+        uMin = (float)(tileX * tileWidth) / atlasWidth;
+        uMax = (float)((tileX + 1) * tileWidth) / atlasWidth;
+
+        // Flip Y because Unity UV coordinates start at the bottom
+        vMin = 1.0f - (float)((tileY + 1) * tileHeight) / atlasHeight;
+        vMax = 1.0f - (float)(tileY * tileHeight) / atlasHeight;
     }
 }

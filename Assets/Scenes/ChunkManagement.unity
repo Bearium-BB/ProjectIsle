@@ -154,7 +154,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -492,7 +492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbca4e622f9350e429f078e7d220f182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChunkManagerService
-  textureAtlas: {fileID: 2800000, guid: 9f662e06de63b944d8fdc6208b2b8311, type: 3}
+  textureAtlas: {fileID: 2800000, guid: 3947b33232e2b0c468279896274256aa, type: 3}
   generatingMeshes: {fileID: 2130276606}
   mapGeneration: {fileID: 2130276607}
   player: {fileID: 1252965412}
