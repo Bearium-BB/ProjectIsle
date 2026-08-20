@@ -6,7 +6,7 @@ public class ChunkManagerService : MonoBehaviour
 {
     int mapSize = 1024;
     int chunkSize = 32;
-
+    float tileSize = 4f;
     List<Chunk> chunks = new List<Chunk>();
 
     public Texture2D textureAtlas;
@@ -23,6 +23,7 @@ public class ChunkManagerService : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+
         chunks = ConvertMapToChunks(mapGeneration.GenerateMap(), chunkSize);
 
         Vector2Int chunkPosition = WorldToChunkPosition(new Vector2(player.position.x, player.position.z));
@@ -149,17 +150,21 @@ public class ChunkManagerService : MonoBehaviour
 
     public Vector2Int WorldToChunkPosition(Vector2 worldPosition)
     {
-        int chunkX = Mathf.FloorToInt(worldPosition.x / chunkSize);
-        int chunkY = Mathf.FloorToInt(worldPosition.y / chunkSize);
+        float worldChunkSize = chunkSize * tileSize;
+
+        int chunkX = Mathf.FloorToInt(worldPosition.x / worldChunkSize);
+        int chunkY = Mathf.FloorToInt(worldPosition.y / worldChunkSize);
 
         return new Vector2Int(chunkX, chunkY);
     }
 
     public Vector2 ChunkToWorldPosition(Vector2Int chunkPosition)
     {
+        float worldChunkSize = chunkSize * tileSize;
+
         return new Vector2(
-            chunkPosition.x * chunkSize,
-            chunkPosition.y * chunkSize
+            chunkPosition.x * worldChunkSize,
+            chunkPosition.y * worldChunkSize
         );
     }
 

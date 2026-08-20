@@ -413,10 +413,19 @@ public class GeneratingMeshes : MonoBehaviour
         {
             for (int x = 0; x < xSize; x++)
             {
-                vertices[vertexIndex + 0] = new Vector3(x, 0, z);
-                vertices[vertexIndex + 1] = new Vector3(x + 1, 0, z);
-                vertices[vertexIndex + 2] = new Vector3(x, 0, z + 1);
-                vertices[vertexIndex + 3] = new Vector3(x + 1, 0, z + 1);
+                float tileSize = 4f;
+
+                vertices[vertexIndex + 0] =
+                    new Vector3(x * tileSize, 0, z * tileSize);
+
+                vertices[vertexIndex + 1] =
+                    new Vector3((x + 1) * tileSize, 0, z * tileSize);
+
+                vertices[vertexIndex + 2] =
+                    new Vector3(x * tileSize, 0, (z + 1) * tileSize);
+
+                vertices[vertexIndex + 3] =
+                    new Vector3((x + 1) * tileSize, 0, (z + 1) * tileSize);
 
                 int nodeIndex = z * xSize + x;
 
@@ -482,7 +491,7 @@ public class GeneratingMeshes : MonoBehaviour
         material.mainTexture = textureAtlas;
 
         emptyGO.AddComponent<MeshRenderer>().material = material;
-        emptyGO.transform.position = new Vector3(chunk.chunkX * 32, 0, chunk.chunkY * 32);
+        emptyGO.transform.position = new Vector3(chunk.chunkX * 128, 0, chunk.chunkY * 128);
 
         return emptyGO;
 
