@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.U2D.ScriptablePacker;
 
 public class ServiceTexturerManager
 {
