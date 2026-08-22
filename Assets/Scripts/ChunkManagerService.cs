@@ -7,9 +7,8 @@ public class ChunkManagerService : MonoBehaviour
     int mapSize = 1024;
     int chunkSize = 32;
     float tileSize = 4f;
-    List<Chunk> chunks = new List<Chunk>();
 
-    public Texture2D textureAtlas;
+    List<Chunk> chunks = new List<Chunk>();
 
     public GeneratingMeshes generatingMeshes = new GeneratingMeshes();
 
@@ -20,6 +19,9 @@ public class ChunkManagerService : MonoBehaviour
     public List<GameObject> meshes = new List<GameObject>();
 
     public Vector2Int oldChunkPosition = Vector2Int.zero;
+
+    public int chunkRadius = 3;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -27,11 +29,11 @@ public class ChunkManagerService : MonoBehaviour
         chunks = ConvertMapToChunks(mapGeneration.GenerateMap(), chunkSize);
 
         Vector2Int chunkPosition = WorldToChunkPosition(new Vector2(player.position.x, player.position.z));
-        List<Chunk> nearbyChunks = GetChunksInRadius(chunkPosition.x, chunkPosition.y, 3);
+        List<Chunk> nearbyChunks = GetChunksInRadius(chunkPosition.x, chunkPosition.y, chunkRadius);
 
         for (int i = 0; i < nearbyChunks.Count; i++)
         {
-            meshes.Add(generatingMeshes.GenerateGrid(nearbyChunks[i], textureAtlas));
+            meshes.Add(generatingMeshes.GenerateGrid(nearbyChunks[i]));
         }
 
         Debug.Log("Found " + nearbyChunks.Count + " nearby chunks.");
@@ -50,11 +52,11 @@ public class ChunkManagerService : MonoBehaviour
 
             meshes.Clear();
 
-            List<Chunk> nearbyChunks = GetChunksInRadius(chunkPosition.x, chunkPosition.y, 3);
+            List<Chunk> nearbyChunks = GetChunksInRadius(chunkPosition.x, chunkPosition.y, chunkRadius);
 
             for (int i = 0; i < nearbyChunks.Count; i++)
             {
-                meshes.Add(generatingMeshes.GenerateGrid(nearbyChunks[i], textureAtlas));
+                meshes.Add(generatingMeshes.GenerateGrid(nearbyChunks[i]));
             }
 
             oldChunkPosition = chunkPosition;

@@ -6,6 +6,8 @@ public class GeneratingMeshes : MonoBehaviour
     public int xSize = 10; // Number of segments along X
     public int zSize = 10; // Number of segments along Z
 
+    public ServiceTexturerManager serviceTexturerManager;
+
     //public Texture2D[] textures;
 
     // Your texture atlas
@@ -14,6 +16,12 @@ public class GeneratingMeshes : MonoBehaviour
     // Number of tiles across and down
     //public int atlasColumns = 2;
     //public int atlasRows = 2;
+
+    void Awake()
+    {
+        serviceTexturerManager = new ServiceTexturerManager();
+
+    }
 
     void Start()
     {
@@ -395,8 +403,12 @@ public class GeneratingMeshes : MonoBehaviour
     //    GetComponent<MeshRenderer>().material = material;
     //}
 
-    public GameObject GenerateGrid(Chunk chunk, Texture2D textureAtlas)
+    public GameObject GenerateGrid(Chunk chunk)
     {
+        TextureAtlasTextureCoordinates textureAtlasTextureCoordinates = serviceTexturerManager.GetTextureById(0);
+        TextureAtlasTextureCoordinates landTextureCoordinates = serviceTexturerManager.GetTextureById(0);
+        TextureAtlasTextureCoordinates waterTextureCoordinates = serviceTexturerManager.GetTextureById(1);
+
         Mesh mesh = new Mesh();
         mesh.name = "ProceduralGrid";
 
@@ -438,13 +450,11 @@ public class GeneratingMeshes : MonoBehaviour
 
                 if (node.type == MapNodeType.land)
                 {
-
-                    GetTileUV(2048, 2048, 512, 512, 0, 0,out uMin, out uMax, out vMin, out vMax);
- 
+                    GetTileUV(landTextureCoordinates.textureSizeX, landTextureCoordinates.textureSizeY, landTextureCoordinates.tileSizeX, landTextureCoordinates.tileSizeY, landTextureCoordinates.texturesCoordinatesX, landTextureCoordinates.texturesCoordinatesY, out uMin, out uMax, out vMin, out vMax);
                 }
                 else if (node.type == MapNodeType.water)
                 {
-                    GetTileUV(2048, 2048, 512, 512, 1, 0, out uMin, out uMax, out vMin, out vMax);
+                    GetTileUV(waterTextureCoordinates.textureSizeX, waterTextureCoordinates.textureSizeY, waterTextureCoordinates.tileSizeX, waterTextureCoordinates.tileSizeY, waterTextureCoordinates.texturesCoordinatesX, waterTextureCoordinates.texturesCoordinatesY, out uMin, out uMax, out vMin, out vMax);                
                 }
 
                 uv[vertexIndex + 0] = new Vector2(uMin, vMin);
@@ -488,7 +498,7 @@ public class GeneratingMeshes : MonoBehaviour
             Shader.Find("Universal Render Pipeline/Unlit")
         );
 
-        material.mainTexture = textureAtlas;
+        material.mainTexture = textureAtlasTextureCoordinates.texture;
 
         emptyGO.AddComponent<MeshRenderer>().material = material;
         emptyGO.transform.position = new Vector3(chunk.chunkX * 128, 0, chunk.chunkY * 128);

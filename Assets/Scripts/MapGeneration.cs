@@ -15,7 +15,7 @@ public class MapGeneration : MonoBehaviour
 
     void Start()
     {
-        GenerateMap();
+
     }
 
     // Update is called once per frame
