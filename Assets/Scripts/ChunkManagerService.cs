@@ -33,7 +33,7 @@ public class ChunkManagerService : MonoBehaviour
 
         for (int i = 0; i < nearbyChunks.Count; i++)
         {
-            meshes.Add(generatingMeshes.GenerateGrid(nearbyChunks[i]));
+            meshes.Add(generatingMeshes.GenerateGrid(nearbyChunks[i], tileSize));
         }
 
         Debug.Log("Found " + nearbyChunks.Count + " nearby chunks.");
@@ -56,7 +56,7 @@ public class ChunkManagerService : MonoBehaviour
 
             for (int i = 0; i < nearbyChunks.Count; i++)
             {
-                meshes.Add(generatingMeshes.GenerateGrid(nearbyChunks[i]));
+                meshes.Add(generatingMeshes.GenerateGrid(nearbyChunks[i], tileSize));
             }
 
             oldChunkPosition = chunkPosition;

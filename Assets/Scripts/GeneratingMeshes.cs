@@ -403,7 +403,7 @@ public class GeneratingMeshes : MonoBehaviour
     //    GetComponent<MeshRenderer>().material = material;
     //}
 
-    public GameObject GenerateGrid(Chunk chunk)
+    public GameObject GenerateGrid(Chunk chunk, float tileSize)
     {
         TextureAtlasTextureCoordinates textureAtlasTextureCoordinates = serviceTexturerManager.GetTextureById(0);
         TextureAtlasTextureCoordinates landTextureCoordinates = serviceTexturerManager.GetTextureById(0);
@@ -425,8 +425,6 @@ public class GeneratingMeshes : MonoBehaviour
         {
             for (int x = 0; x < xSize; x++)
             {
-                float tileSize = 4f;
-
                 vertices[vertexIndex + 0] =
                     new Vector3(x * tileSize, 0, z * tileSize);
 
@@ -501,7 +499,7 @@ public class GeneratingMeshes : MonoBehaviour
         material.mainTexture = textureAtlasTextureCoordinates.texture;
 
         emptyGO.AddComponent<MeshRenderer>().material = material;
-        emptyGO.transform.position = new Vector3(chunk.chunkX * 128, 0, chunk.chunkY * 128);
+        emptyGO.transform.position = new Vector3(chunk.chunkX * (32 * tileSize), 0, chunk.chunkY * (32 * tileSize));
 
         return emptyGO;
 
