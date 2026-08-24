@@ -57,7 +57,7 @@ public class ServiceTexturerManager
 
         return new TextureAtlasTextureCoordinates(textureData.Id, textureData.TextureSizeX, textureData.TextureSizeY, textureData.TileSizeX, textureData.TileSizeY, textureData.TexturesCoordinatesX, textureData.TexturesCoordinatesY, texture2Ds[textureData.IdAtlas]);
     }
-   
+
     Texture2D LoadTexture(string relativePath)
     {
         string path = Path.Combine(
@@ -96,7 +96,46 @@ public class ServiceTexturerManager
         return texture;
     }
 
+    public void GetTileUV(
+    int atlasWidth,
+    int atlasHeight,
+    int tileWidth,
+    int tileHeight,
+    int tileX,
+    int tileY,
+    out float uMin,
+    out float uMax,
+    out float vMin,
+    out float vMax)
+    {
+        uMin = (float)(tileX * tileWidth) / atlasWidth;
+        uMax = (float)((tileX + 1) * tileWidth) / atlasWidth;
+
+        // Flip Y because Unity UV coordinates start at the bottom
+        vMin = 1.0f - (float)((tileY + 1) * tileHeight) / atlasHeight;
+        vMax = 1.0f - (float)(tileY * tileHeight) / atlasHeight;
+    }
+
+    Texture2D GetTileTexture(Texture2D atlas, TextureAtlasTextureCoordinates textureCoordinates)
+    {
+        int x = textureCoordinates.texturesCoordinatesX * textureCoordinates.tileSizeX;
+        int y = textureCoordinates.texturesCoordinatesY * textureCoordinates.tileSizeY;
+
+        int width = textureCoordinates.tileSizeX;
+        int height = textureCoordinates.tileSizeY;
+
+        Color[] pixels = atlas.GetPixels(x, y, width, height);
+
+        Texture2D tileTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+
+        tileTexture.SetPixels(pixels);
+        tileTexture.Apply();
+
+        return tileTexture;
+    }
+
 }
+
 
 [Serializable]
 public class TextureData

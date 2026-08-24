@@ -2,21 +2,25 @@
   "items": [
     {
       "id": 1,
+      "idTexture": 3,
       "maxStack": 64,
       "name": "Wood"
     },
     {
-      "id": 2,
+      "id": 4,
+      "idTexture": 4,
       "maxStack": 64,
       "name": "Stone"
     },
     {
       "id": 3,
+      "idTexture": 5,
       "maxStack": 16,
       "name": "Iron Ore"
     },
     {
       "id": 4,
+      "idTexture": 2,
       "maxStack": 1,
       "name": "Iron Sword"
     }

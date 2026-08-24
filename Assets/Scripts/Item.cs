@@ -5,6 +5,7 @@ using UnityEngine;
 public class Item
 {
     public int id;
+    public int idTexture;
     public int maxStack;
     public string name;
 }

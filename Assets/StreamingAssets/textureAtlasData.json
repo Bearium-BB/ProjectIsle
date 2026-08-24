@@ -3,6 +3,10 @@
     {
       "id": 0,
       "path": "Textures/GrassWaterTextureAtlas.png"
+    },
+    {
+      "id": 1,
+      "path": "Textures/TransparentIcons.png"
     }
   ]
 }

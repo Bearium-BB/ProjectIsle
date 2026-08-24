@@ -6,6 +6,8 @@ using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
+using static UnityEditor.PlayerSettings;
 
 public class Inventory : MonoBehaviour
 {
@@ -17,13 +19,22 @@ public class Inventory : MonoBehaviour
 
     public InventoryUIContainer[] inventoryUIContainers;
 
+    public ServiceTexturerManager serviceTexturerManager;
+
+
     public GameObject UI;
     public GameObject ParentUI;
+
+    TextureAtlasTextureCoordinates TextureCoordinates;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        serviceTexturerManager = new ServiceTexturerManager();
+
+        TextureCoordinates = serviceTexturerManager.GetTextureById(2);
+
         inventorySlots = new InventorySlot[sizeOfInventory];
         inventoryUIContainers = new InventoryUIContainer[sizeOfInventory];
 
@@ -101,6 +112,29 @@ public class Inventory : MonoBehaviour
             {
                 inventoryUIContainers[i].amount.text = inventorySlots[i].amount.ToString();
                 inventoryUIContainers[i].name.text = inventorySlots[i].item.name;
+
+                float uMin = 0;
+                float uMax = 0;
+                float vMin = 0;
+                float vMax = 0;
+
+                TextureCoordinates = serviceTexturerManager.GetTextureById(inventorySlots[i].item.idTexture);
+
+                inventoryUIContainers[i].image.texture = TextureCoordinates.texture;
+
+                serviceTexturerManager.GetTileUV(TextureCoordinates.textureSizeX, TextureCoordinates.textureSizeY, TextureCoordinates.tileSizeX, TextureCoordinates.tileSizeY, TextureCoordinates.texturesCoordinatesX, TextureCoordinates.texturesCoordinatesY, out uMin, out uMax, out vMin, out vMax);
+
+                Debug.Log(uMin);
+                Debug.Log(vMin);
+                Debug.Log(uMax - uMin);
+                Debug.Log(vMax - vMin);
+
+                inventoryUIContainers[i].image.uvRect = new Rect(
+                    uMin,
+                    vMin,
+                    uMax - uMin,
+                    vMax - vMin
+                );
             }
         }
     }
