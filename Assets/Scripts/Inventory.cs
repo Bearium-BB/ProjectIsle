@@ -38,9 +38,17 @@ public class Inventory : MonoBehaviour
             inventoryUIContainers[i] = Instantiate(UI, ParentUI.transform).GetComponent<InventoryUIContainer>();
         }
 
-        for (int i = 0; i < 1000; i++) 
+        for (int i = 0; i < 50; i++) 
         {
-            AddInventory(itemManagerService.GetRandomItem(), UnityEngine.Random.Range(0,5));
+
+            Item item = itemManagerService.GetRandomItem();
+
+            if (item.id == 3 || item.id == 4)
+            {
+                continue;
+            }
+
+            AddInventory(item, UnityEngine.Random.Range(0,5));
         }
 
         foreach (InventorySlot test in inventorySlots)
@@ -65,7 +73,7 @@ public class Inventory : MonoBehaviour
         {
             InventorySlot slot = inventorySlots
                 .Where(x => x != null &&
-                            x.item == item &&
+                            x.item.id == item.id &&
                             x.amount < x.item.maxStack)
                 .OrderByDescending(x => x.amount)
                 .FirstOrDefault();
@@ -126,6 +134,100 @@ public class Inventory : MonoBehaviour
                     vMax - vMin
                 );
             }
+        }
+    }
+
+    public bool HasItem(int itemId, int amount)
+    {
+        int totalAmount = inventorySlots
+            .Where(slot => slot != null && slot.item.id == itemId)
+            .Sum(slot => slot.amount);
+
+        return totalAmount >= amount;
+    }
+
+    public bool RemoveItem(int itemId, int amount)
+    {
+        if (!HasItem(itemId, amount))
+        {
+            return false;
+        }
+
+        int remaining = amount;
+
+        // Remove from slots until we've removed the requested amount
+        for (int i = 0; i < inventorySlots.Length && remaining > 0; i++)
+        {
+            InventorySlot slot = inventorySlots[i];
+
+            if (slot == null || slot.item.id != itemId)
+            {
+                continue;
+            }
+
+            int amountToRemove = Mathf.Min(slot.amount, remaining);
+
+            slot.amount -= amountToRemove;
+            remaining -= amountToRemove;
+
+            // Remove the slot completely if it's empty
+            if (slot.amount <= 0)
+            {
+                inventorySlots[i] = null;
+            }
+        }
+
+        UpdateInventoryUI();
+
+        return true;
+    }
+
+    private void UpdateInventoryUI()
+    {
+        for (int i = 0; i < inventoryUIContainers.Length; i++)
+        {
+            if (inventorySlots[i] == null)
+            {
+                inventoryUIContainers[i].amount.text = "";
+                inventoryUIContainers[i].name.text = "";
+                inventoryUIContainers[i].image.texture = null;
+
+                continue;
+            }
+
+            inventoryUIContainers[i].amount.text =
+                inventorySlots[i].amount.ToString();
+
+            inventoryUIContainers[i].name.text =
+                inventorySlots[i].item.name;
+
+            TextureAtlasTextureCoordinates textureCoordinates =
+                serviceTexturerManager.GetTextureById(
+                    inventorySlots[i].item.idTexture
+                );
+
+            inventoryUIContainers[i].image.texture =
+                textureCoordinates.texture;
+
+            serviceTexturerManager.GetTileUV(
+                textureCoordinates.textureSizeX,
+                textureCoordinates.textureSizeY,
+                textureCoordinates.tileSizeX,
+                textureCoordinates.tileSizeY,
+                textureCoordinates.texturesCoordinatesX,
+                textureCoordinates.texturesCoordinatesY,
+                out float uMin,
+                out float uMax,
+                out float vMin,
+                out float vMax
+            );
+
+            inventoryUIContainers[i].image.uvRect = new Rect(
+                uMin,
+                vMin,
+                uMax - uMin,
+                vMax - vMin
+            );
         }
     }
 }
