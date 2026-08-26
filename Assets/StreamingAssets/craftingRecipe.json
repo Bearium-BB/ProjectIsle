@@ -3,6 +3,7 @@
     {
       "id": 0,
       "craftedItemId": 3,
+      "amount": 1,
       "recipe": [
         {
           "itemId": 0,
@@ -17,6 +18,7 @@
     {
       "id": 1,
       "craftedItemId": 4,
+      "amount": 1,
       "recipe": [
         {
           "itemId": 0,
@@ -31,6 +33,7 @@
     {
       "id": 2,
       "craftedItemId": 5,
+      "amount": 1,
       "recipe": [
         {
           "itemId": 0,

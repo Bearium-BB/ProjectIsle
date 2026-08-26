@@ -8,6 +8,7 @@ public class CraftingRecipeMetaData
     public CraftingRecipeItemAmount[] recipe;
     public int id;
     public int craftedItemId;
+    public int amount;
 }
 
 [Serializable]

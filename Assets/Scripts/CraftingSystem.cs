@@ -221,7 +221,7 @@ public class CraftingSystem : MonoBehaviour
             );
 
         // Add the crafted item to the inventory
-        inventory.AddInventory(craftedItem, 1);
+        inventory.AddInventory(craftedItem, selectedRecipe.amount);
 
         Debug.Log($"Crafted {craftedItem.name}!");
     }
