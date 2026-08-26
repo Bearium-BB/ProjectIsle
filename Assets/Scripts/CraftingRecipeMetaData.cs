@@ -1,25 +1,24 @@
+using System;
 using UnityEngine;
 
+[Serializable]
 public class CraftingRecipeMetaData
 {
 
-    CraftingRecipeItemAmount[] recipe;
-    int craftedItemId;
-
-    public CraftingRecipeMetaData(CraftingRecipeItemAmount[] recipe)
-    {
-        this.recipe = recipe;
-    }
+    public CraftingRecipeItemAmount[] recipe;
+    public int id;
+    public int craftedItemId;
 }
 
+[Serializable]
 public class CraftingRecipeItemAmount
 {
-    public int id;
+    public int itemId;
     public int amount;
+}
 
-    public CraftingRecipeItemAmount(int id, int amount)
-    {
-        this.id = id;
-        this.amount = amount;
-    }
+[Serializable]
+public class CraftingRecipeMetaDataArray
+{
+    public CraftingRecipeMetaData[] recipes;
 }

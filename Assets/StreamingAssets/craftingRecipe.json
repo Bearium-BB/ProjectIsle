@@ -1,0 +1,42 @@
+{
+  "recipes": [
+    {
+      "id": 0,
+      "craftedItemId": 3,
+      "recipe": [
+        {
+          "itemId": 0,
+          "amount": 3
+        },
+        {
+          "itemId": 2,
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "craftedItemId": 4,
+      "recipe": [
+        {
+          "itemId": 0,
+          "amount": 3
+        },
+        {
+          "itemId": 1,
+          "amount": 12
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "craftedItemId": 5,
+      "recipe": [
+        {
+          "itemId": 0,
+          "amount": 4
+        }
+      ]
+    }
+  ]
+}

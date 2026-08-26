@@ -25,15 +25,10 @@ public class Inventory : MonoBehaviour
     public GameObject UI;
     public GameObject ParentUI;
 
-    TextureAtlasTextureCoordinates TextureCoordinates;
-
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         serviceTexturerManager = new ServiceTexturerManager();
-
-        TextureCoordinates = serviceTexturerManager.GetTextureById(2);
 
         inventorySlots = new InventorySlot[sizeOfInventory];
         inventoryUIContainers = new InventoryUIContainer[sizeOfInventory];
@@ -118,16 +113,11 @@ public class Inventory : MonoBehaviour
                 float vMin = 0;
                 float vMax = 0;
 
-                TextureCoordinates = serviceTexturerManager.GetTextureById(inventorySlots[i].item.idTexture);
+                TextureAtlasTextureCoordinates textureCoordinates = serviceTexturerManager.GetTextureById(inventorySlots[i].item.idTexture);
 
-                inventoryUIContainers[i].image.texture = TextureCoordinates.texture;
+                inventoryUIContainers[i].image.texture = textureCoordinates.texture;
 
-                serviceTexturerManager.GetTileUV(TextureCoordinates.textureSizeX, TextureCoordinates.textureSizeY, TextureCoordinates.tileSizeX, TextureCoordinates.tileSizeY, TextureCoordinates.texturesCoordinatesX, TextureCoordinates.texturesCoordinatesY, out uMin, out uMax, out vMin, out vMax);
-
-                Debug.Log(uMin);
-                Debug.Log(vMin);
-                Debug.Log(uMax - uMin);
-                Debug.Log(vMax - vMin);
+                serviceTexturerManager.GetTileUV(textureCoordinates.textureSizeX, textureCoordinates.textureSizeY, textureCoordinates.tileSizeX, textureCoordinates.tileSizeY, textureCoordinates.texturesCoordinatesX, textureCoordinates.texturesCoordinatesY, out uMin, out uMax, out vMin, out vMax);
 
                 inventoryUIContainers[i].image.uvRect = new Rect(
                     uMin,

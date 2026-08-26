@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public class ItemManagerService
@@ -21,5 +22,10 @@ public class ItemManagerService
     public Item GetRandomItem()
     {
         return items[Random.Range(0, items.Length)];
+    }
+    public Item GetItemById(int id)
+    {
+        
+        return items.Where(x => x.id == id).FirstOrDefault();
     }
 }

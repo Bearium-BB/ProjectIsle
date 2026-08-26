@@ -10,7 +10,7 @@ public class Item
     public string name;
 }
 
-[System.Serializable]
+[Serializable]
 public class ItemList
 {
     public Item[] items;

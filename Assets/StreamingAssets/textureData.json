@@ -59,6 +59,26 @@
       "tileSizeY": 32,
       "texturesCoordinatesX": 2,
       "texturesCoordinatesY": 17
+    },
+    {
+      "id": 6,
+      "idAtlas": 1,
+      "textureSizeX": 512,
+      "textureSizeY": 867,
+      "tileSizeX": 32,
+      "tileSizeY": 32,
+      "texturesCoordinatesX": 11,
+      "texturesCoordinatesY": 19
+    },
+    {
+      "id": 7,
+      "idAtlas": 1,
+      "textureSizeX": 512,
+      "textureSizeY": 867,
+      "tileSizeX": 32,
+      "tileSizeY": 32,
+      "texturesCoordinatesX": 2,
+      "texturesCoordinatesY": 4
     }
   ]
 }
