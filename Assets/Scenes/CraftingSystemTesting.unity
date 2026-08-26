@@ -870,7 +870,6 @@ GameObject:
   m_Component:
   - component: {fileID: 585587561}
   - component: {fileID: 585587560}
-  - component: {fileID: 585587562}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -890,7 +889,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b0b4e699ed8a040a0da7c20ce40cf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CraftingSystem
-  inventory: {fileID: 0}
+  inventory: {fileID: 5613367}
   ui: {fileID: 2682179518309056320, guid: 106f4f41661533d46b64ea3edede9c49, type: 3}
   containerUi: {fileID: 1439961871}
   containerUiCraftingAmount: {fileID: 1608493594}
@@ -910,22 +909,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &585587562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 585587559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6e1a5a552c09f94daf628df32c95016, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Inventory
-  sizeOfInventory: 9
-  inventoryUIContainers: []
-  UI: {fileID: 0}
-  ParentUI: {fileID: 0}
 --- !u!1 &704790600
 GameObject:
   m_ObjectHideFlags: 0
