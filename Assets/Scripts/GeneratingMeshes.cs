@@ -405,9 +405,11 @@ public class GeneratingMeshes : MonoBehaviour
 
     public GameObject GenerateGrid(Chunk chunk, float tileSize)
     {
-        TextureAtlasTextureCoordinates textureAtlasTextureCoordinates = serviceTexturerManager.GetTextureById(0);
-        TextureAtlasTextureCoordinates landTextureCoordinates = serviceTexturerManager.GetTextureById(0);
-        TextureAtlasTextureCoordinates waterTextureCoordinates = serviceTexturerManager.GetTextureById(1);
+        TextureAtlasTextureCoordinates textureAtlasTextureCoordinates = serviceTexturerManager.GetTextureById(8);
+        TextureAtlasTextureCoordinates landTextureCoordinates = serviceTexturerManager.GetTextureById(8);
+        TextureAtlasTextureCoordinates waterTextureCoordinates = serviceTexturerManager.GetTextureById(9);
+        TextureAtlasTextureCoordinates pinkishTextureCoordinates = serviceTexturerManager.GetTextureById(10);
+        TextureAtlasTextureCoordinates bioluminescentForestTextureCoordinates = serviceTexturerManager.GetTextureById(11);
 
         Mesh mesh = new Mesh();
         mesh.name = "ProceduralGrid";
@@ -446,9 +448,17 @@ public class GeneratingMeshes : MonoBehaviour
                 float vMin = 0;
                 float vMax = 0;
 
-                if (node.type == MapNodeType.land)
+                if (node.regionID == 1)
                 {
                     GetTileUV(landTextureCoordinates.textureSizeX, landTextureCoordinates.textureSizeY, landTextureCoordinates.tileSizeX, landTextureCoordinates.tileSizeY, landTextureCoordinates.texturesCoordinatesX, landTextureCoordinates.texturesCoordinatesY, out uMin, out uMax, out vMin, out vMax);
+                }
+                if (node.regionID == 2)
+                {
+                    GetTileUV(pinkishTextureCoordinates.textureSizeX, pinkishTextureCoordinates.textureSizeY, pinkishTextureCoordinates.tileSizeX, pinkishTextureCoordinates.tileSizeY, pinkishTextureCoordinates.texturesCoordinatesX, pinkishTextureCoordinates.texturesCoordinatesY, out uMin, out uMax, out vMin, out vMax);
+                }
+                if (node.regionID == 3)
+                {
+                    GetTileUV(pinkishTextureCoordinates.textureSizeX, pinkishTextureCoordinates.textureSizeY, bioluminescentForestTextureCoordinates.tileSizeX, bioluminescentForestTextureCoordinates.tileSizeY, bioluminescentForestTextureCoordinates.texturesCoordinatesX, bioluminescentForestTextureCoordinates.texturesCoordinatesY, out uMin, out uMax, out vMin, out vMax);
                 }
                 else if (node.type == MapNodeType.water)
                 {

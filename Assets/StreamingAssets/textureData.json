@@ -79,6 +79,46 @@
       "tileSizeY": 32,
       "texturesCoordinatesX": 2,
       "texturesCoordinatesY": 4
+    },
+    {
+      "id": 8,
+      "idAtlas": 2,
+      "textureSizeX": 2048,
+      "textureSizeY": 2048,
+      "tileSizeX": 512,
+      "tileSizeY": 512,
+      "texturesCoordinatesX": 0,
+      "texturesCoordinatesY": 0
+    },
+    {
+      "id": 9,
+      "idAtlas": 2,
+      "textureSizeX": 2048,
+      "textureSizeY": 2048,
+      "tileSizeX": 512,
+      "tileSizeY": 512,
+      "texturesCoordinatesX": 1,
+      "texturesCoordinatesY": 0
+    },
+    {
+      "id": 10,
+      "idAtlas": 2,
+      "textureSizeX": 2048,
+      "textureSizeY": 2048,
+      "tileSizeX": 512,
+      "tileSizeY": 512,
+      "texturesCoordinatesX": 2,
+      "texturesCoordinatesY": 0
+    },
+    {
+      "id": 11,
+      "idAtlas": 2,
+      "textureSizeX": 2048,
+      "textureSizeY": 2048,
+      "tileSizeX": 512,
+      "tileSizeY": 512,
+      "texturesCoordinatesX": 3,
+      "texturesCoordinatesY": 0
     }
   ]
 }

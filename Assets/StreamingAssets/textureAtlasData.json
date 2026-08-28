@@ -7,6 +7,10 @@
     {
       "id": 1,
       "path": "Textures/TransparentIcons.png"
+    },
+    {
+      "id": 2,
+      "path": "Textures/ThreeBiomeTextureMap.png"
     }
   ]
 }
