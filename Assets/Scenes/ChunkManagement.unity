@@ -371,6 +371,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 1024056325029564895, guid: 175dc46f4912dc740ba0dc9340804321, type: 3}
+      propertyPath: moveSpeed
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 1192350759227414233, guid: 175dc46f4912dc740ba0dc9340804321, type: 3}
       propertyPath: m_LocalPosition.x
       value: 128
@@ -586,6 +590,7 @@ GameObject:
   - component: {fileID: 2130276604}
   - component: {fileID: 2130276606}
   - component: {fileID: 2130276607}
+  - component: {fileID: 2130276608}
   m_Layer: 0
   m_Name: ChunkManagement
   m_TagString: Untagged
@@ -607,6 +612,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ChunkManagerService
   generatingMeshes: {fileID: 2130276606}
   mapGeneration: {fileID: 2130276607}
+  mapPopulationManager: {fileID: 2130276608}
   player: {fileID: 1252965412}
   meshes: []
   oldChunkPosition: {x: 0, y: 0}
@@ -652,6 +658,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fde537d98dd5574c9ff3544b1f838c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapGeneration
+--- !u!114 &2130276608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2130276603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4bf2b92e79eaa041abbd6dc7bdb1ed2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ServiceMapPopulationManager
+  regionSpawnData:
+  - regionID: 1
+    spawnObject: {fileID: 738690414004387914, guid: 4ab7404ab7ca2d04b906fbe64ed8fffd, type: 3}
+  - regionID: 3
+    spawnObject: {fileID: 4006193620643000728, guid: f36b614cd312f8743b49e7ffd1629871, type: 3}
+  - regionID: 2
+    spawnObject: {fileID: 5778859069983134974, guid: 80e09cda7abab8c46b245be29f80940d, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

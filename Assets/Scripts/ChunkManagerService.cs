@@ -14,6 +14,8 @@ public class ChunkManagerService : MonoBehaviour
 
     public MapGeneration mapGeneration = new MapGeneration();
 
+    public ServiceMapPopulationManager mapPopulationManager;
+
     public Transform player;
 
     public List<GameObject> meshes = new List<GameObject>();
@@ -25,15 +27,34 @@ public class ChunkManagerService : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
         chunks = ConvertMapToChunks(mapGeneration.GenerateMap(), chunkSize);
+
+        mapPopulationManager.CalculateSpawnOfObjects(mapGeneration);
+
+        foreach (var item in mapPopulationManager.objectSpawnPositions)
+        {
+            bool isVal = TryGetChunkAndNodeIndex(item.Key, out Chunk chunk , out int index);
+            Debug.Log(isVal);
+
+            if (isVal)
+            {
+                chunk.objects.TryAdd(item.Key, item.Value);
+            }
+        }
 
         Vector2Int chunkPosition = WorldToChunkPosition(new Vector2(player.position.x, player.position.z));
         List<Chunk> nearbyChunks = GetChunksInRadius(chunkPosition.x, chunkPosition.y, chunkRadius);
 
         for (int i = 0; i < nearbyChunks.Count; i++)
         {
-            meshes.Add(generatingMeshes.GenerateGrid(nearbyChunks[i], tileSize));
+            GameObject gameObject = generatingMeshes.GenerateGrid(nearbyChunks[i], tileSize);
+
+            foreach (var item in nearbyChunks[i].objects)
+            {
+                Instantiate(item.Value, new Vector3(item.Key.x * tileSize, 0, item.Key.y * tileSize), Quaternion.identity, gameObject.transform);
+            }
+            meshes.Add(gameObject);
+
         }
 
         Debug.Log("Found " + nearbyChunks.Count + " nearby chunks.");
@@ -56,7 +77,14 @@ public class ChunkManagerService : MonoBehaviour
 
             for (int i = 0; i < nearbyChunks.Count; i++)
             {
-                meshes.Add(generatingMeshes.GenerateGrid(nearbyChunks[i], tileSize));
+                GameObject gameObject = generatingMeshes.GenerateGrid(nearbyChunks[i], tileSize);
+
+                foreach (var item in nearbyChunks[i].objects)
+                {
+                    Instantiate(item.Value, new Vector3(item.Key.x * tileSize, 0, item.Key.y * tileSize), Quaternion.identity, gameObject.transform);
+                }
+                meshes.Add(gameObject);
+
             }
 
             oldChunkPosition = chunkPosition;
@@ -206,6 +234,30 @@ public class ChunkManagerService : MonoBehaviour
 
         return chunks;
     }
+
+    public bool TryGetChunkAndNodeIndex(
+    Vector2 position,
+    out Chunk chunk,
+    out int nodeIndex)
+    {
+        chunk = null;
+        nodeIndex = -1;
+
+        foreach (Chunk currentChunk in chunks)
+        {
+            for (int i = 0; i < currentChunk.nodes.Count; i++)
+            {
+                if (currentChunk.nodes[i].pos == position)
+                {
+                    chunk = currentChunk;
+                    nodeIndex = i;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
 
 public class Chunk
@@ -215,6 +267,7 @@ public class Chunk
 
     public List<MapNode> nodes = new List<MapNode>();
 
+    public Dictionary<Vector2, GameObject> objects = new Dictionary<Vector2, GameObject>();
     public Chunk(int chunkX, int chunkY)
     {
         this.chunkX = chunkX;

@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 public class MapGeneration : MonoBehaviour
 {
-    MapNode[,] mapNodes;
+    public MapNode[,] mapNodes;
     int MapSize = 1024;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
