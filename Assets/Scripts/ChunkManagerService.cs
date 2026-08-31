@@ -51,7 +51,13 @@ public class ChunkManagerService : MonoBehaviour
 
             foreach (var item in nearbyChunks[i].objects)
             {
-                Instantiate(item.Value, new Vector3(item.Key.x * tileSize, 0, item.Key.y * tileSize), Quaternion.identity, gameObject.transform);
+                GameObject obj = Instantiate(item.Value, gameObject.transform);
+
+                obj.transform.position = new Vector3(
+                    item.Key.x * tileSize,
+                    0,
+                    item.Key.y * tileSize
+                );
             }
             meshes.Add(gameObject);
 
