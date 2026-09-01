@@ -8,10 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/MapGeneration.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/ChunkManagement.unity
     guid: 4add4bf456731da4499b8877effab5f3
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/CraftingSystemTesting.unity
     guid: 325dbb41d83f9b24cb3707272b3378af
   m_configObjects:
