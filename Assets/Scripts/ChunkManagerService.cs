@@ -10,6 +10,8 @@ public class ChunkManagerService : MonoBehaviour
 
     List<Chunk> chunks = new List<Chunk>();
 
+    public ServiceObjectPoolingManager serviceObjectPoolingManager;
+
     public GeneratingMeshes generatingMeshes = new GeneratingMeshes();
 
     public MapGeneration mapGeneration = new MapGeneration();
@@ -19,6 +21,9 @@ public class ChunkManagerService : MonoBehaviour
     public Transform player;
 
     public List<GameObject> meshes = new List<GameObject>();
+
+    public List<ObjectPoolGameObject> pools = new List<ObjectPoolGameObject>();
+
 
     public Vector2Int oldChunkPosition = Vector2Int.zero;
 
@@ -45,23 +50,23 @@ public class ChunkManagerService : MonoBehaviour
         Vector2Int chunkPosition = WorldToChunkPosition(new Vector2(player.position.x, player.position.z));
         List<Chunk> nearbyChunks = GetChunksInRadius(chunkPosition.x, chunkPosition.y, chunkRadius);
 
-        for (int i = 0; i < nearbyChunks.Count; i++)
-        {
-            GameObject gameObject = generatingMeshes.GenerateGrid(nearbyChunks[i], tileSize);
+        //for (int i = 0; i < nearbyChunks.Count; i++)
+        //{
+        //    GameObject gameObject = generatingMeshes.GenerateGrid(nearbyChunks[i], tileSize);
 
-            foreach (var item in nearbyChunks[i].objects)
-            {
-                GameObject obj = Instantiate(item.Value, gameObject.transform);
+        //    foreach (var item in nearbyChunks[i].objects)
+        //    {
+        //        ObjectPoolGameObject objectPoolGameObject = serviceObjectPoolingManager.EnableGameObjectById(item.Value, new Vector3(item.Key.x * tileSize, 0, item.Key.y * tileSize), Quaternion.identity, null);
 
-                obj.transform.position = new Vector3(
-                    item.Key.x * tileSize,
-                    0,
-                    item.Key.y * tileSize
-                );
-            }
-            meshes.Add(gameObject);
+        //        objectPoolGameObject.GetTransform().position = new Vector3(
+        //            item.Key.x * tileSize,
+        //            0,
+        //            item.Key.y * tileSize
+        //        );
+        //    }
+        //    meshes.Add(gameObject);
 
-        }
+        //}
 
         Debug.Log("Found " + nearbyChunks.Count + " nearby chunks.");
     }
@@ -77,6 +82,11 @@ public class ChunkManagerService : MonoBehaviour
                 Destroy(gameObject);
             }
 
+            foreach (ObjectPoolGameObject pool in pools)
+            {
+                pool.DisableObject();
+            }
+            pools.Clear();
             meshes.Clear();
 
             List<Chunk> nearbyChunks = GetChunksInRadius(chunkPosition.x, chunkPosition.y, chunkRadius);
@@ -87,7 +97,7 @@ public class ChunkManagerService : MonoBehaviour
 
                 foreach (var item in nearbyChunks[i].objects)
                 {
-                    Instantiate(item.Value, new Vector3(item.Key.x * tileSize, 0, item.Key.y * tileSize), Quaternion.identity, gameObject.transform);
+                    pools.Add(serviceObjectPoolingManager.EnableGameObjectById(item.Value, new Vector3(item.Key.x * tileSize, 0, item.Key.y * tileSize), Quaternion.identity, null));
                 }
                 meshes.Add(gameObject);
 
@@ -273,7 +283,7 @@ public class Chunk
 
     public List<MapNode> nodes = new List<MapNode>();
 
-    public Dictionary<Vector2, GameObject> objects = new Dictionary<Vector2, GameObject>();
+    public Dictionary<Vector2, int> objects = new Dictionary<Vector2, int>();
     public Chunk(int chunkX, int chunkY)
     {
         this.chunkX = chunkX;
