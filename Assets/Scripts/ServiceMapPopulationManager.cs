@@ -6,7 +6,7 @@ public class ServiceMapPopulationManager : MonoBehaviour
     [SerializeField]
     List<RegionSpawnData> regionSpawnData = new List<RegionSpawnData>();
 
-    public Dictionary<Vector2, GameObject> objectSpawnPositions = new Dictionary<Vector2, GameObject>();
+    public Dictionary<Vector2, int> objectSpawnPositions = new Dictionary<Vector2, int>();
 
     public void CalculateSpawnOfObjects(MapGeneration mapGeneration)
     {
@@ -119,5 +119,5 @@ public class ServiceMapPopulationManager : MonoBehaviour
 public class RegionSpawnData
 {
     public int regionID;
-    public GameObject spawnObject;
+    public int spawnObject;
 }
