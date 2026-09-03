@@ -86,6 +86,7 @@ public class ChunkManagerService : MonoBehaviour
             {
                 pool.DisableObject();
             }
+
             pools.Clear();
             meshes.Clear();
 
