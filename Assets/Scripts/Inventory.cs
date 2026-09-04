@@ -10,6 +10,9 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
+
+    //make an inventory interface
+
     InventorySlot[] inventorySlots;
 
     public int sizeOfInventory = 9;
