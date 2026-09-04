@@ -20,7 +20,7 @@ public class ChunkManagerService : MonoBehaviour
 
     public Transform player;
 
-    public List<GameObject> meshes = new List<GameObject>();
+    public List<ObjectPoolGameObject> meshes = new List<ObjectPoolGameObject>();
 
     public List<ObjectPoolGameObject> pools = new List<ObjectPoolGameObject>();
 
@@ -77,9 +77,9 @@ public class ChunkManagerService : MonoBehaviour
 
         if (oldChunkPosition != chunkPosition)
         {
-            foreach (GameObject gameObject in meshes)
+            foreach (ObjectPoolGameObject gameObject in meshes)
             {
-                Destroy(gameObject);
+                gameObject.DisableObject();
             }
 
             foreach (ObjectPoolGameObject pool in pools)
@@ -94,7 +94,7 @@ public class ChunkManagerService : MonoBehaviour
 
             for (int i = 0; i < nearbyChunks.Count; i++)
             {
-                GameObject gameObject = generatingMeshes.GenerateGrid(nearbyChunks[i], tileSize);
+                ObjectPoolGameObject gameObject = generatingMeshes.GenerateGrid(nearbyChunks[i], tileSize);
 
                 foreach (var item in nearbyChunks[i].objects)
                 {

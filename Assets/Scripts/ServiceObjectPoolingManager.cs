@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections.LowLevel.Unsafe;
@@ -7,18 +8,6 @@ using UnityEngine;
 public class ServiceObjectPoolingManager : MonoBehaviour
 {
     [SerializeField] private List<ObjectPool> pools = new();
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public ObjectPoolGameObject AddObjectToPool(int id)
     {
@@ -57,7 +46,6 @@ public class ServiceObjectPoolingManager : MonoBehaviour
         Quaternion rotation,
         Transform parent = null)
     {
-
         ObjectPoolGameObject obj = GetObjectByID(id);
 
         obj.GetTransform().SetPositionAndRotation(position, rotation);
@@ -107,5 +95,10 @@ public class ObjectPoolGameObject
     public Transform GetTransform()
     {
         return gameObject.transform;
+    }
+
+    public T GetComponent<T>() where T : Component
+    {
+        return gameObject.GetComponent<T>();
     }
 }

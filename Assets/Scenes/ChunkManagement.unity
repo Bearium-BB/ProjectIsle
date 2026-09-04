@@ -1410,6 +1410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GeneratingMeshes
   xSize: 32
   zSize: 32
+  serviceObjectPoolingManager: {fileID: 2130276609}
 --- !u!114 &2130276607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1422,6 +1423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fde537d98dd5574c9ff3544b1f838c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapGeneration
+  serviceObjectPoolingManager: {fileID: 2130276609}
 --- !u!114 &2130276608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1462,6 +1464,9 @@ MonoBehaviour:
     objects: []
   - id: 2
     originalObject: {fileID: 5778859069983134974, guid: 80e09cda7abab8c46b245be29f80940d, type: 3}
+    objects: []
+  - id: 3
+    originalObject: {fileID: 5702260889581338116, guid: e033735061198b3419dbd6e5ed3902f8, type: 3}
     objects: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

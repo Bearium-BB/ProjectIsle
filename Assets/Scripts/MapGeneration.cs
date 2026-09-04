@@ -10,6 +10,7 @@ public class MapGeneration : MonoBehaviour
 {
     public MapNode[,] mapNodes;
     int MapSize = 1024;
+    [SerializeField] public ServiceObjectPoolingManager serviceObjectPoolingManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 

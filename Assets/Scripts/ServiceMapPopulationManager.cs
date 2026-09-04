@@ -39,7 +39,7 @@ public class ServiceMapPopulationManager : MonoBehaviour
             }
         }
 
-        int objectsToSpawn = 1000;
+        int objectsToSpawn = 200;
 
         while (objectsToSpawn > 0)
         {

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GeneratingMeshes : MonoBehaviour
@@ -7,6 +9,8 @@ public class GeneratingMeshes : MonoBehaviour
     public int zSize = 10; // Number of segments along Z
 
     public ServiceTexturerManager serviceTexturerManager;
+
+    public ServiceObjectPoolingManager serviceObjectPoolingManager;
 
     Material material;
 
@@ -409,7 +413,7 @@ public class GeneratingMeshes : MonoBehaviour
     //    GetComponent<MeshRenderer>().material = material;
     //}
 
-    public GameObject GenerateGrid(Chunk chunk, float tileSize)
+    public ObjectPoolGameObject GenerateGrid(Chunk chunk, float tileSize)
     {
         TextureAtlasTextureCoordinates textureAtlasTextureCoordinates = serviceTexturerManager.GetTextureById(8);
         TextureAtlasTextureCoordinates landTextureCoordinates = serviceTexturerManager.GetTextureById(8);
@@ -493,16 +497,17 @@ public class GeneratingMeshes : MonoBehaviour
         // Assign mesh data
         // -------------------------
 
+        mesh.Clear();
+
         mesh.vertices = vertices;
         mesh.uv = uv;
         mesh.triangles = triangles;
-
+        
         mesh.RecalculateNormals();
 
-        GameObject emptyGO = new GameObject("New Engine");
+        ObjectPoolGameObject objectPool = serviceObjectPoolingManager.EnableGameObjectById(3, Vector3.zero, Quaternion.identity, null);
 
-        emptyGO.AddComponent<MeshFilter>().mesh = mesh;
-
+        objectPool.GetComponent<MeshFilter>().mesh = mesh;
 
         // -------------------------
         // Create material
@@ -510,10 +515,12 @@ public class GeneratingMeshes : MonoBehaviour
 
         material.mainTexture = textureAtlasTextureCoordinates.texture;
 
-        emptyGO.AddComponent<MeshRenderer>().material = material;
-        emptyGO.transform.position = new Vector3(chunk.chunkX * (32 * tileSize), 0, chunk.chunkY * (32 * tileSize));
 
-        return emptyGO;
+        objectPool.GetComponent<MeshRenderer>().material = material;
+
+        objectPool.GetTransform().position = new Vector3(chunk.chunkX * (32 * tileSize), 0, chunk.chunkY * (32 * tileSize));
+
+        return objectPool;
 
     }
 
