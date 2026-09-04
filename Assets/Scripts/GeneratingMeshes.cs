@@ -8,6 +8,8 @@ public class GeneratingMeshes : MonoBehaviour
 
     public ServiceTexturerManager serviceTexturerManager;
 
+    Material material;
+
     //public Texture2D[] textures;
 
     // Your texture atlas
@@ -19,6 +21,10 @@ public class GeneratingMeshes : MonoBehaviour
 
     void Awake()
     {
+        material = new Material(
+            Shader.Find("Universal Render Pipeline/Unlit")
+        );
+
         serviceTexturerManager = new ServiceTexturerManager();
 
     }
@@ -501,10 +507,6 @@ public class GeneratingMeshes : MonoBehaviour
         // -------------------------
         // Create material
         // -------------------------
-
-        Material material = new Material(
-            Shader.Find("Universal Render Pipeline/Unlit")
-        );
 
         material.mainTexture = textureAtlasTextureCoordinates.texture;
 
